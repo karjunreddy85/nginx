@@ -1,0 +1,15 @@
+[webservers]
+web1 ansible_ssh_host=54.202.162.95
+web2 ansible_ssh_host=34.220.219.140
+web3 ansible_ssh_host=54.149.253.91
+web4 ansible_ssh_host=54.187.168.78
+web5 ansible_ssh_host=34.220.202.165
+web6 ansible_ssh_host=34.222.125.133
+web7 ansible_ssh_host=52.10.166.157
+web8 ansible_ssh_host=34.219.238.241
+web9 ansible_ssh_host=54.191.149.33
+web10 ansible_ssh_host=34.220.241.241
+
+[webservers:vars]
+ansible_ssh_user=user1
+ansible_ssh_pass=1234

@@ -1,0 +1,21 @@
+---
+- hosts: webservers
+  serial: 3
+  become: true
+  tasks:
+
+  - name: Install Apache web Browser
+    apt: name=apache2 state=present update_cache=yes
+
+  - name: Delete default index page
+    file:
+      path: /var/www/html/index.html
+      state: absent
+
+  - name: Copy Our Latest Webpage from Nexus
+    copy:
+      src: index.html 
+      dest: /var/www/html/
+
+  - name: Restart Apache server
+    service: name=apache2 state=restarted
