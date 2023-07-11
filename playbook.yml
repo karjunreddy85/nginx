@@ -1,21 +1,59 @@
 ---
 - hosts: webservers
-  serial: 3
   become: true
   tasks:
 
-  - name: Install Apache web Browser
-    apt: name=apache2 state=present update_cache=yes
+  - name: Install Apache web server in Web1
+    apt:
+      name: apache2
+      state: present
+    when: qDebian"
 
-  - name: Delete default index page
-    file:
-      path: /var/www/html/index.html
-      state: absent
+  - name: Install Apache web server in Web2
+    dnf:
+      name: httpd
+      state: present
+    when: ansible_os_family == "RedHat"
 
-  - name: Copy Our Latest Webpage from Nexus
+  - name: Deploy index.html
     copy:
-      src: index.html 
+      src: index.html
       dest: /var/www/html/
 
-  - name: Restart Apache server
-    service: name=apache2 state=restarted
+  - name: Restart Apache  Web Server in Web1
+    service:
+      name: apache2
+      state: restarted
+    when: ansible_os_family == "Debian"
+
+  - name: Restart Apache  Web Server in Web2
+    service:
+      name: httpd
+      state: restarted
+    when: ansible_os_family == "RedHat"
+
+
+- hosts: Nginx
+  become: true
+  tasks:
+
+  - name: Install Nginx
+    apt:
+      name: nginx
+      state: present
+
+  - name: Delete default file
+    file:
+      path: /etc/nginx/sites-enabled/default
+      state: absent
+
+
+  - name: Copy Load Balancer file
+    copy:
+      src: load-balancer.conf
+      dest: /etc/nginx/conf.d/
+
+  - name: Restart Nginx
+    service:
+      name: nginx
+      state: restarted
